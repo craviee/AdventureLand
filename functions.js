@@ -1,6 +1,43 @@
 setInterval(function(){
-	sortInventory();
+	
 },1000/4); // Loops every 1/4 seconds.
+
+character.items.forEach((i) => { game_log(i); });
+
+function compoundItem(id, minimumItemsLeft, maxLevel)
+{
+    let itemsLeft = 0;
+	let done = false;
+    character.items.forEach((i) => { if(i && i.name==id) itemsLeft++ });
+    if(itemsLeft > minimumItemsLeft)
+    {
+        for(let level = 0; level <= maxLevel; level++)
+        {
+            for(let i = 0; i < character.items.length; i++)
+            {
+                if(character.items[i] && character.items[i].name==id && character.items[i].level == level)
+                {
+                    for(let j = i+1; j < character.items.length; j++)
+                    {
+                        if(character.items[j] && character.items[j].name==id && character.items[j].level == level)
+                        {
+                            for(let k = j+1; k < character.items.length; k++)
+                            {
+                                if(character.items[k] && character.items[k].name==id && character.items[k].level == level && !done && !character.q.compound)
+                                {
+									done = true;
+                                    if(locate_item("cscroll1") == -1)
+                                        buy("cscroll1",1);
+                                    compound(i,j,k,locate_item("cscroll1"), null);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 function sortInventory()
 {
