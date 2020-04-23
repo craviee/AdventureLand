@@ -2,7 +2,30 @@ setInterval(function(){
 	
 },1000/4); // Loops every 1/4 seconds.
 
-character.items.forEach((i) => { game_log(i); });
+function upgradeItem(id, minimumItemsLeft,maxLevel)
+{
+    let itemsLeft = 0;
+    let done = false;
+    let scroll = "";
+    character.items.forEach((i) => { if(i && i.name==id) itemsLeft++ });
+    if(itemsLeft > minimumItemsLeft)
+    {
+        for(let level = 0; level <= maxLevel; level++)
+        {
+            for(let i = 0; i < character.items.length; i++)
+            {
+                if(character.items[i] && character.items[i].name==id && character.items[i].level == level && !done && !character.q.upgrade)
+                {
+                    done = true;
+                    scroll = level <=2 && item_grade(character.items[i])==0 ? "scroll0" : "scroll1";
+                    if(locate_item(scroll) == -1)
+                        buy(scroll, 1);
+                    upgrade(i,locate_item(scroll));
+                }
+            }
+        }
+    }
+}
 
 function compoundItem(id, minimumItemsLeft, maxLevel)
 {
